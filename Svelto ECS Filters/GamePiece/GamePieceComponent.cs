@@ -25,7 +25,7 @@ namespace Svelto_ECS_Filters.GamePiece {
         }
 
         public override string ToString() {
-            return String.Format("{0} : {{ CombatOrder : {1}}}", typeof(GamePieceComponent).ToString(), CombatOrder);
+            return String.Format("{0} : {{EGID : {2}, CombatOrder : {1}}}", typeof(GamePieceComponent).Name, CombatOrder, ID);
         }
     }
 }
