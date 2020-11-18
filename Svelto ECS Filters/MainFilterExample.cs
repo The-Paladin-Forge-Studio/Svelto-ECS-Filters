@@ -13,9 +13,9 @@ namespace Svelto_ECS_Filters {
             return id++;
         }
         
-        static void CreateEntityWithComponent(IEntityFactory entityFactory, GamePieceComponent component, ExclusiveGroup group) {
+        static void CreateEntityWithComponent<T>(IEntityFactory entityFactory, T component, ExclusiveGroup group) where T : struct, IEntityComponent {
             EntityComponentInitializer componentInitializer = entityFactory.BuildEntity<GamePieceEntity>(new EGID(NewEntityID(), group));
-            componentInitializer.Init<GamePieceComponent>(component);
+            componentInitializer.Init<T>(component);
         }
 
         static void CreateRandomEntities(IEntityFactory entityFactory, int quantity, ExclusiveGroup group) {
