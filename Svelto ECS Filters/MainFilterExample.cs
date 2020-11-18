@@ -5,8 +5,26 @@ using System;
 
 namespace Svelto_ECS_Filters {
 
+
     class MainFilterExample {
+        static uint id;
+
+        static uint NewEntityID() {
+            return id++;
+        }
         
+        static void CreateEntityWithComponent(IEntityFactory entityFactory, GamePieceComponent component, ExclusiveGroup group) {
+            EntityComponentInitializer componentInitializer = entityFactory.BuildEntity<GamePieceEntity>(new EGID(NewEntityID(), group));
+            componentInitializer.Init<GamePieceComponent>(component);
+        }
+
+        static void CreateRandomEntities(IEntityFactory entityFactory, int quantity, ExclusiveGroup group) {
+            var rand = new Random();
+            for (int i=0; i<quantity; i++) {
+                CreateEntityWithComponent(entityFactory, new GamePieceComponent(rand.Next(1,500)), group);
+            }
+        }
+
         static void Main(string[] args) {
             ExclusiveGroup combatGroup = new ExclusiveGroup();
             int filterID = 1;
@@ -22,12 +40,7 @@ namespace Svelto_ECS_Filters {
 
             IEntityFactory entityFactory = enginesRoot.GenerateEntityFactory();
 
-            EntityComponentInitializer componentInitializer = entityFactory.BuildEntity<GamePieceEntity>(new EGID(50, combatGroup));
-            componentInitializer.Init<GamePieceComponent>(new GamePieceComponent(10));
-            componentInitializer = entityFactory.BuildEntity<GamePieceEntity>(new EGID(51, combatGroup));
-            componentInitializer.Init<GamePieceComponent>(new GamePieceComponent(20));
-            componentInitializer = entityFactory.BuildEntity<GamePieceEntity>(new EGID(52, combatGroup));
-            componentInitializer.Init<GamePieceComponent>(new GamePieceComponent(15));
+            CreateRandomEntities(entityFactory, 50, combatGroup);
 
             entityScheduler.SubmitEntities();
 
